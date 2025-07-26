@@ -2,7 +2,7 @@
 title: "风飝 的 Unity 插件库"
 description: "展示我开发的 Unity 插件，包含使用教程和示例代码。"
 baseurl: ""    # 留空
-url: "https://<username>.github.io"
+url: "https://github.com/J-SL/My-Unity-Packages-introduce"
 
 theme: minima
 markdown: kramdown

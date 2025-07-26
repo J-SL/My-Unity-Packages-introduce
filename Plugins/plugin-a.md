@@ -14,7 +14,7 @@ permalink: /plugins/plugin-a.html
 
 1. 在 Unity 中打开 Package Manager
 2. 点击 “+” → Add package from git URL...
-3. 填入：`https://github.com/<username>/plugin-a.git`
+3. 填入：`https://github.com/J-SL/My-Unity-Packages-introduce/blob/main/Plugins/plugin-a.md`
 
 **使用示例**
 
