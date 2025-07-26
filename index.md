@@ -1,20 +1,42 @@
 ---
 layout: home
-title: "欢迎来到我的 Unity 插件展示"
+title: "🎮 欢迎来到我的 Unity 插件库"
 ---
 
-# 🎮 欢迎来到我的 Unity 插件展示
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .plugin-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  .plugin-list li {
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  .plugin-list a {
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration: none;
+    color: #007acc;
+  }
+  .plugin-list .desc {
+    margin-top: 4px;
+    color: #555;
+  }
+</style>
 
-这里是我开发的 Unity 插件列表，你可以点击插件名称查看更多详情：
+<p>这里是我制作的 Unity 插件集合，每个插件都配有使用教程和示例代码：</p>
 
-<div style="margin-top: 2em;">
+<ul class="plugin-list">
   {% for plugin in site.data.plugins %}
-    <div style="padding: 1em; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 1em; background-color: #f9f9f9;">
-      <h2 style="margin: 0 0 0.5em 0;">
-        <a href="{{ plugin.url }}" style="text-decoration: none; color: #007acc;">🔗 {{ plugin.name }}</a>
-      </h2>
-      <p style="margin: 0;">{{ plugin.short_desc }}</p>
-    </div>
+    <li>
+      <a href="{{ plugin.url }}" target="_blank">{{ plugin.name }}</a>
+      <div class="desc">{{ plugin.short_desc }}</div>
+    </li>
   {% endfor %}
-</div>
-
+</ul>

@@ -1,9 +1,7 @@
-- name: 插件A
-  url: /plugins/plugin-a.html
-  short_desc: 在场景中一键拍摄快照
+- name: Super Button
+  url: https://github.com/J-SL/SuperButton
+  short_desc: 一键给 Unity Inspector 添加按钮的编辑器扩展。
 
-- name: 插件B
-  url: /plugins/plugin-b.html
-  short_desc: 自定义坐标路径绘制工具
-
-# 可继续添加更多插件。
+- name: Path Curve Drawer
+  url: https://github.com/J-SL/PathCurve
+  short_desc: 可视化绘制路径曲线，适用于导航或动画轨迹。
