@@ -1,0 +1,9 @@
+- name: 插件A
+  url: /plugins/plugin-a.html
+  short_desc: 在场景中一键拍摄快照
+
+- name: 插件B
+  url: /plugins/plugin-b.html
+  short_desc: 自定义坐标路径绘制工具
+
+# 可继续添加更多插件。
