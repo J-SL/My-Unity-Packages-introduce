@@ -1,7 +1,0 @@
-- name: Super Button
-  url: https://github.com/J-SL/SuperButton
-  short_desc: 一键给 Unity Inspector 添加按钮的编辑器扩展。
-
-- name: Path Curve Drawer
-  url: https://github.com/J-SL/PathCurve
-  short_desc: 可视化绘制路径曲线，适用于导航或动画轨迹。
