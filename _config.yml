@@ -1,0 +1,8 @@
+# Site settings
+title: "风飝 的 Unity 插件库"
+description: "展示我开发的 Unity 插件，包含使用教程和示例代码。"
+baseurl: ""    # 留空
+url: "https://<username>.github.io"
+
+theme: minima
+markdown: kramdown
