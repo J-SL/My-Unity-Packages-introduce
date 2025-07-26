@@ -6,6 +6,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <title>风飝 的 Unity 插件库</title>
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* 仅更改插件列表横向滚动 */
+    .scrollable {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      gap: 2rem;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 1rem 0;
+      scroll-behavior: smooth;
+
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 1rem 0;
+      scroll-behavior: smooth;
+    }
+
+    .scrollable::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .scrollable::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+    }
+  </style>
 </head>
 
 <body>
@@ -18,7 +48,7 @@
       <h1 class="logo">🎮 风飝 Unity 插件库</h1>
       <nav>
         <a href="#features">特色功能</a>
-        <a href="#contact">联系我们</a>
+        <a href="#contact">联系作者</a>
       </nav>
     </div>
   </header>
@@ -28,28 +58,28 @@
     <div class="container hero-content">
       <h2>让你的 Unity 开发更高效</h2>
       <p>探索我为 Unity 打造的系列插件，轻松扩展编辑器功能，提升生产力。</p>
-      <a href="#plugins" class="btn">查看插件</a>
+      <!-- 已删除查看插件按钮 -->
     </div>
   </section>
 
   <!-- 特色功能 -->
   <section id="features" class="features container fade-in-left">
-    <h2 class="section-title">特色功能</h2>
+    <h2 class="section-title">我的插件特点</h2>
     <div class="grid-features">
       <div class="feature-item">
         <img src="images/operate.png" alt="一键操作" />
-        <h3>一键操作</h3>
-        <p>快速调用，减少重复点击，让开发更顺畅。</p>
+        <h3>易使用</h3>
+        <p>每个插件都配有视频教程。</p>
       </div>
       <div class="feature-item delay-1">
         <img src="images/custom.png" alt="高度可定制" />
-        <h3>高度可定制</h3>
-        <p>提供多种配置选项，满足不同项目需求。</p>
+        <h3>可定制</h3>
+        <p>可扩展性强，支持自定义功能。</p>
       </div>
       <div class="feature-item delay-2">
         <img src="images/performance.png" alt="高性能" />
-        <h3>优雅界面</h3>
-        <p>简洁卡片式布局，直观且易于扩展。</p>
+        <h3>高性能</h3>
+        <p>代码经过优化，无需担心性能问题。</p>
       </div>
     </div>
   </section>
@@ -57,16 +87,33 @@
   <!-- 插件列表，支持滚动 -->
   <main class="container">
     <h2 id="plugins" class="section-title fade-in-right">插件列表</h2>
-    <section class="grid scrollable">
+    <section class="scrollable">
       <article class="card fade-in-up delay-1">
         <img src="images/Curve.png" alt="Path Curve" />
         <h3><a href="plugins/plugin-a.html">Path Curve</a></h3>
-        <p>在场景中一键拍摄快照，支持自定义分辨率与命名。</p>
+        <p>在两点间创建自己喜好的特征曲线,使GameObject沿曲线移动。</p>
         <a href="plugins/plugin-a.html" class="card-btn">了解详情 →</a>
       </article>
+
+
       <article class="card fade-in-up delay-2">
         <img src="images/plugin-b.png" alt="插件B 截图" />
         <h3><a href="plugins/plugin-b.html">插件B</a></h3>
+        <p>可视化路径编辑器，生成可复用轨迹数据。</p>
+        <a href="plugins/plugin-b.html" class="card-btn">了解详情 →</a>
+      </article>
+
+      <article class="card fade-in-up delay-2">
+        <img src="images/plugin-b.png" alt="插件C 截图" />
+        <h3><a href="plugins/plugin-b.html">插件C</a></h3>
+        <p>可视化路径编辑器，生成可复用轨迹数据。</p>
+        <a href="plugins/plugin-b.html" class="card-btn">了解详情 →</a>
+      </article>
+
+
+      <article class="card fade-in-up delay-2">
+        <img src="images/plugin-b.png" alt="插件B 截图" />
+        <h3><a href="plugins/plugin-b.html">插件D</a></h3>
         <p>可视化路径编辑器，生成可复用轨迹数据。</p>
         <a href="plugins/plugin-b.html" class="card-btn">了解详情 →</a>
       </article>
@@ -74,7 +121,7 @@
     </section>
   </main>
 
-  <!-- 底部页脚，移除联系我们板块后固定底部 -->
+  <!-- 底部页脚 -->
   <footer class="site-footer fixed-bottom fade-in-up">
     <div class="container">
       <p>&copy; 2025 风飝 | All Rights Reserved.</p>
