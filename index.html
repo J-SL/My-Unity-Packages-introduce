@@ -2,53 +2,23 @@
 <html lang="zh-CN">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <title>风飝 的 Unity 插件库</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <style>
-    /* 仅更改插件列表横向滚动 */
-    .scrollable {
-      display: flex !important;
-      flex-direction: row !important;
-      flex-wrap: nowrap !important;
-      gap: 2rem;
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding: 1rem 0;
-      scroll-behavior: smooth;
-
-      display: flex;
-      flex-direction: row;
-      gap: 2rem;
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding: 1rem 0;
-      scroll-behavior: smooth;
-    }
-
-    .scrollable::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .scrollable::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 4px;
-    }
-  </style>
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 
 <body>
-  <!-- 整体半透明背景图 -->
-  <div class="images/bg.jpg"></div>
+  <!-- 背景遮罩 -->
+  <div class="bg-overlay"></div>
 
   <!-- 顶部导航 -->
   <header class="site-header fade-in-down">
     <div class="container">
       <h1 class="logo">🎮 风飝 Unity 插件库</h1>
-      <nav>
-        <a href="#features">特色功能</a>
-        <a href="#contact">联系作者</a>
+      <nav class="contact-text">
+        <img src="images/qq.png" alt="联系作者" class="contact-icon" />
+        联系作者：<a href="mailto:2294421852@qq.com">2294421852@qq.com</a>
       </nav>
     </div>
   </header>
@@ -58,7 +28,6 @@
     <div class="container hero-content">
       <h2>让你的 Unity 开发更高效</h2>
       <p>探索我为 Unity 打造的系列插件，轻松扩展编辑器功能，提升生产力。</p>
-      <!-- 已删除查看插件按钮 -->
     </div>
   </section>
 
@@ -84,44 +53,46 @@
     </div>
   </section>
 
-  <!-- 插件列表，支持滚动 -->
+  <!-- 插件列表 -->
   <main class="container">
     <h2 id="plugins" class="section-title fade-in-right">插件列表</h2>
     <section class="scrollable">
+
       <article class="card fade-in-up delay-1">
         <img src="images/Curve.png" alt="Path Curve" />
-        <h3><a href="plugins/plugin-a.html">Path Curve</a></h3>
-        <p>在两点间创建自己喜好的特征曲线,使GameObject沿曲线移动。</p>
-        <a href="plugins/plugin-a.html" class="card-btn">了解详情 →</a>
-      </article>
-
-
-      <article class="card fade-in-up delay-2">
-        <img src="images/plugin-b.png" alt="插件B 截图" />
-        <h3><a href="plugins/plugin-b.html">插件B</a></h3>
-        <p>可视化路径编辑器，生成可复用轨迹数据。</p>
-        <a href="plugins/plugin-b.html" class="card-btn">了解详情 →</a>
+        <h3>Path Curve</h3>
+        <p>在两点间创建自己喜好的特征曲线，使 GameObject 沿曲线移动。</p>
+        <!-- 只有这个按钮可点击 -->
+        <a href="plugins/Path Curve/Path Curve.html" class="card-btn">了解详情 →</a>
       </article>
 
       <article class="card fade-in-up delay-2">
-        <img src="images/plugin-b.png" alt="插件C 截图" />
-        <h3><a href="plugins/plugin-b.html">插件C</a></h3>
-        <p>可视化路径编辑器，生成可复用轨迹数据。</p>
-        <a href="plugins/plugin-b.html" class="card-btn">了解详情 →</a>
+        <img src="images/super button.png" alt="Super Button" />
+        <h3>Super Button</h3>
+        <p>好用的编辑器插件，美观地将方法显示在编辑器上。</p>
+        <a href="plugins/Super Button.html" class="card-btn">了解详情 →</a>
       </article>
-
 
       <article class="card fade-in-up delay-2">
-        <img src="images/plugin-b.png" alt="插件B 截图" />
-        <h3><a href="plugins/plugin-b.html">插件D</a></h3>
-        <p>可视化路径编辑器，生成可复用轨迹数据。</p>
-        <a href="plugins/plugin-b.html" class="card-btn">了解详情 →</a>
+        <img src="images/plugin-b.png" alt="TMPP" />
+        <h3>TMPP</h3>
+        <p>基于 TextMeshPro 的文本编辑器扩展，支持多语言。</p>
+        <a href="plugins/TMPP.html" class="card-btn">了解详情 →</a>
       </article>
-      <!-- 更多卡片复制此块，替换图片和内容 -->
+
+      <article class="card fade-in-up delay-2">
+        <img src="images/follower-ui.png" alt="Follower UI" />
+        <h3>Follower UI</h3>
+        <p>一键创建世界空间中便捷跟随物体的 UGUI。</p>
+        <a href="plugins/FollowerUI.html" class="card-btn">了解详情 →</a>
+      </article>
+
+      <!-- 复制上述 <article> 块以添加更多插件卡片 -->
     </section>
   </main>
 
-  <!-- 底部页脚 -->
+
+  <!-- 页脚 -->
   <footer class="site-footer fixed-bottom fade-in-up">
     <div class="container">
       <p>&copy; 2025 风飝 | All Rights Reserved.</p>
