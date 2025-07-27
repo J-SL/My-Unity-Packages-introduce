@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>插件详情 - 插件名称</title>
+    <style>
+        /* 主题色 & 变量 */
+        :root {
+            --primary: #007acc;
+            --primary-light: #e6f4ff;
+            --text-dark: #333;
+            --bg: #f5f5f5;
+            --card-bg: #ffffff;
+            --border: #e0e0e0;
+            --radius: 8px;
+            --transition: 0.3s;
+        }
+
+        /* 全局重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", sans-serif;
+            color: var(--text-dark);
+            background: var(--bg);
+            line-height: 1.6;
+            padding: 1rem 0;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+
+        a:hover {
+            color: darken(var(--primary), 10%);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* 标题区 */
+        h1 {
+            margin: 0;
+            padding: 1.5rem;
+            background: var(--primary);
+            color: #fff;
+            font-size: 1.75rem;
+            text-align: center;
+        }
+
+        /* 通用区块样式 */
+        section {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            transition: background var(--transition);
+        }
+
+        section.hidden {
+            display: none;
+        }
+
+        section h2 {
+            position: relative;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: var(--primary);
+            padding-left: 0.75rem;
+        }
+
+        section h2::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.25rem;
+            width: 4px;
+            height: 1.2em;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        /* 视频区 */
+        #video iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 图文介绍 */
+        #intro img {
+            max-width: 100%;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        #intro p {
+            margin-bottom: 1rem;
+        }
+
+        /* API 列表 */
+        #api dl {
+            margin: 0;
+        }
+
+        #api dt {
+            font-weight: bold;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: var(--primary-light);
+            border-radius: var(--radius);
+        }
+
+        #api dd {
+            margin: 0 0 1rem 1rem;
+            color: var(--text-dark);
+        }
+
+        /* 响应式细节 */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            section {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>插件名称</h1>
+
+        <!-- 视频演示区 -->
+        <section id="video">
+            <h2>视频演示</h2>
+            <!-- 填入你的 iframe 或 <video> 标签 -->
+            <iframe src="https://www.youtube.com/embed/视频ID" allowfullscreen></iframe>
+        </section>
+
+        <!-- 图文介绍区 -->
+        <section id="intro">
+            <h2>图文介绍</h2>
+            <!-- 示例内容 -->
+            <img src="images/screenshot1.png" alt="插件截图 1" />
+            <p>这是一个非常好用的插件，可以帮助你……</p>
+
+            <img src="images/screenshot2.png" alt="插件截图 2" />
+            <p>支持多种场景下的快捷操作，让开发更高效。</p>
+        </section>
+
+
+
+
+
+
+        <!-- API 说明区 -->
+        <section id="api">
+            <h2>API 说明</h2>
+            <dl>
+                <dt>Init()</dt>
+                <dd>初始化插件，必须在 Start() 中调用。</dd>
+                <dt>DoAction(string param)</dt>
+                <dd>执行主要功能，param 用于指定操作类型。</dd>
+                <dt>Dispose()</dt>
+                <dd>清理资源，在插件生命周期结束时调用。</dd>
+                <dt>Dispose()</dt>
+                <dd>清理资源，在插件生命周期结束时调用。</dd>
+                <dt>Dispose()</dt>
+                <dd>清理资源，在插件生命周期结束时调用。</dd>
+                <dt>Dispose()</dt>
+                <dd>清理资源，在插件生命周期结束时调用。</dd>
+                <dt>Dispose()</dt>
+                <dd>清理资源，在插件生命周期结束时调用。</dd>
+            </dl>
+        </section>
+    </div>
+
+    <script>
+        // 自动隐藏无内容区块
+        document.querySelectorAll('section').forEach(sec => {
+            const inner = sec.innerHTML.replace(/<h2>.*<\/h2>/, '').trim();
+            if (!inner) sec.classList.add('hidden');
+        });
+    </script>
+</body>
+
+</html>
