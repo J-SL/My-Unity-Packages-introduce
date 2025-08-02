@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>插件详情 - 插件名称</title>
+    <style>
+        /* 主题色 & 变量 */
+        :root {
+            --primary: #007acc;
+            --primary-light: #e6f4ff;
+            --text-dark: #333;
+            --bg: #f5f5f5;
+            --card-bg: #ffffff;
+            --border: #e0e0e0;
+            --radius: 8px;
+            --transition: 0.3s;
+        }
+
+        /* 全局重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", sans-serif;
+            color: var(--text-dark);
+            background: var(--bg);
+            line-height: 1.6;
+            padding: 1rem 0;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+
+        a:hover {
+            color: darken(var(--primary), 10%);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* 标题区 */
+        h1 {
+            margin: 0;
+            padding: 1.5rem;
+            background: var(--primary);
+            color: #fff;
+            font-size: 1.75rem;
+            text-align: center;
+        }
+
+        /* 通用区块样式 */
+        section {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            transition: background var(--transition);
+        }
+
+        section.hidden {
+            display: none;
+        }
+
+        section h2 {
+            position: relative;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: var(--primary);
+            padding-left: 0.75rem;
+        }
+
+        section h2::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.25rem;
+            width: 4px;
+            height: 1.2em;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        /* 视频区 */
+        #video iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 图文介绍 */
+        #intro img {
+            max-width: 100%;
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        #intro p {
+            margin-bottom: 1rem;
+        }
+
+        /* API 列表 */
+        #api dl {
+            margin: 0;
+        }
+
+        #api dt {
+            font-weight: bold;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: var(--primary-light);
+            border-radius: var(--radius);
+        }
+
+        #api dd {
+            margin: 0 0 1rem 1rem;
+            color: var(--text-dark);
+        }
+
+        /* 响应式细节 */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            section {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Follow UI</h1>
+
+
+
+        <!-- API 说明区 -->
+        <section id="api">
+            <h2>API</h2>
+            <dl>
+                <dt>FollowManager:void AddWorldObject(O worldObject)</dt>
+                <dd>添加物体进入UI管理器，之后如果UI出现在摄像机范围内，则会被UI管理器指定的UI跟随。</dd>
+                <dt>FollowManager:void RemoveWorldObject(O worldObject)</dt>
+                <dd>从UI管理器管理里移除物体。</dd>
+                <dt>FollowManager:bool useScreenSpcae</dt>
+                <dd>使用屏幕空间坐标系。</dd>
+                <dt>FollowManager:folat scaledUI</dt>
+                <dd>UI的scale受物体与摄像机的位置影响。</dd>
+                <dt>FollowManager:folat scaleParam</dt>
+                <dd>缩放UI的参数。</dd>
+                <dt>FollowManager:IFllowUIInfo prefab</dt>
+                <dd>跟随物体的UI预制体。</dd>
+                <dt>FollowManager:List allWorldObjectsList</dt>
+                <dd>序列化要跟随的物体列表。</dd>
+                <dt>IFllowUIInfo:Transform P_Transform</dt>
+                <dd>UI根物体的transform。</dd>
+                <dt>IFllowUIInfo:Renderer P_RectTransform</dt>
+                <dd>UI根物体的RectTransform。</dd>
+
+                <dt>IWorldObjectInfo:Transform P_Transform</dt>
+                <dd>需要被跟随的物体的transform。</dd>
+                <dt>IWorldObjectInfo:Renderer P_Renderer</dt>
+                <dd>需要被跟随的物体的Renderer。</dd>
+
+                <dt>IWorldObjectInfo: void InitUIInfo(UIInfo info);</dt>
+                <dd>UI被生成或被指定给某个物体时调用一次，可以缓存UIInfo用于后续操作UI。</dd>
+            </dl>
+        </section>
+    </div>
+
+    <script>
+        // 自动隐藏无内容区块
+        document.querySelectorAll('section').forEach(sec => {
+            const inner = sec.innerHTML.replace(/<h2>.*<\/h2>/, '').trim();
+            if (!inner) sec.classList.add('hidden');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模块化API文档生成系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --dark: #1d3557;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --border: #dee2e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .project-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .project-selector label {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .project-selector select {
+            padding: 8px 15px;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            background: white;
+            font-size: 1rem;
+        }
+
+        .instructions {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+
+        .instructions.active {
+            display: block;
+        }
+
+        .instructions h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        .instructions code {
+            background: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .api-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .api-class {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .api-class:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .class-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px;
+        }
+
+        .class-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .class-header h2 i {
+            font-size: 1.4rem;
+        }
+
+        .class-description {
+            font-size: 1.05rem;
+            opacity: 0.9;
+        }
+
+        .class-body {
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin: 20px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .method {
+            background: rgba(67, 97, 238, 0.08);
+            border-left: 4px solid var(--primary);
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .property {
+            background: rgba(76, 201, 240, 0.08);
+            border-left: 4px solid var(--success);
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .event {
+            background: rgba(247, 37, 133, 0.08);
+            border-left: 4px solid var(--warning);
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .item-name {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .item-description {
+            color: var(--gray);
+        }
+
+        .param {
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+
+        .param strong {
+            color: var(--primary);
+        }
+
+        .return {
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+
+        .return strong {
+            color: var(--success);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--gray);
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .api-container {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .filter-buttons {
+                flex-wrap: wrap;
+            }
+
+            .project-selector {
+                position: static;
+                justify-content: center;
+                margin-top: 20px;
+            }
+        }
+
+        .toggle-instructions {
+            display: block;
+            margin: 0 auto 20px;
+            padding: 10px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-code"></i> 模块化API文档生成系统</h1>
+            <p>通过分离模板与数据，轻松创建和管理多个API文档项目</p>
+        </header>
+    </div>
+
+    <div class="controls">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="搜索类、方法或属性...">
+        </div>
+
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="plugin">封装类</button>
+            <button class="filter-btn" data-filter="core">核心类</button>
+            <button class="filter-btn" data-filter="utility">工具类</button>
+            <button class="filter-btn" data-filter="service">服务类</button>
+        </div>
+    </div>
+
+    <div class="api-container" id="apiContainer">
+        <!-- API文档将在这里动态生成 -->
+    </div>
+
+    <footer>
+        <p>API文档生成系统 v2.0 | 模块化设计 | 最后更新：2023年10月</p>
+        <p>© 2023 技术文档中心 | 轻松管理您的API文档</p>
+    </footer>
+    </div>
+
+    <script>
+        // API文档生成器类
+        class APIDocumentGenerator {
+            constructor() {
+                this.projects = {
+                    plugin: {
+                        "name": "TMPP",
+                        "description": "基于TextMeshPro，使其具有多语言功能",
+                        "classes": [
+                            {
+                                "name": "TMPPUGUI",
+                                "icon": "heart",
+                                "category": "plugin",
+                                "description": null,
+                                "methods": [
+                                    {
+                                        "name": "Print",
+                                        "description": "打印Guid",
+                                        "params": [],
+                                        "returns": {
+                                            "type": null,
+                                            "description": null
+                                        }
+                                    },
+                                    {
+                                        "name": "Change",
+                                        "description": "更改当前Guid",
+                                        "params": [],
+                                        "returns": {
+                                            "type": null,
+                                            "description": null
+                                        }
+                                    }
+                                ],
+                                "properties": [
+                                    {
+                                        "name": "_guid",
+                                        "type": "SerializableGuid",
+                                        "description": "此组件持有的唯一ID"
+                                    }
+                                ],
+                                "events": []
+                            },
+                            {
+                                "name": "TMPPUGUIManager",
+                                "icon": "heart",
+                                "category": "plugin",
+                                "description": "控制切换文本配置文件",
+                                "methods": [
+                                    {
+                                        "name": "Switch",
+                                        "description": "切换到对应的语言",
+                                        "params": [
+                                            {
+                                                "name": "languageName",
+                                                "type": "string",
+                                                "description": "语言名称"
+                                            }
+                                        ],
+                                        "returns": {
+                                            "type": null,
+                                            "description": null
+                                        }
+                                    }
+                                ],
+                                "properties": [
+                                    {
+                                        "name": "ori",
+                                        "type": "TMPPConfigProvider",
+                                        "description": "TMPP信息容器"
+                                    },
+                                    {
+                                        "name": "others",
+                                        "type": "TMPPConfigProviderCreator[]",
+                                        "description": "TMPP信息容器（通常由SourceConfig创建）"
+                                    }
+                                ],
+                                "events": []
+                            },
+                            {
+                                "name": "ITMPPConfig",
+                                "icon": "star",
+                                "category": "core",
+                                "description": "实现了ILocalizationConfig，可以自主实现ILocalizationConfig来添加更多内容，这里只实现一个Text字段",
+                                "methods": [],
+                                "properties": [
+                                    {
+                                        "name": "Text",
+                                        "type": "string",
+                                        "description": "TMPPUGUI对应的静态文本"
+                                    }
+                                ],
+                                "events": []
+                            },
+                            {
+                                "name": "ITMPPConfigProvider",
+                                "icon": "heart",
+                                "category": "core",
+                                "description": "ITMPPConfig的容器",
+                                "methods": [],
+                                "properties": [
+                                    {
+                                        "name": "TextFontAsset",
+                                        "type": "TMP_FontAsset",
+                                        "description": "字体资源"
+                                    }
+                                ],
+                                "events": []
+                            },
+                            {
+                                "name": "SourceConfig",
+                                "icon": "star",
+                                "category": "core",
+                                "description": "TMPPConfigProvider的基类",
+                                "methods": [
+                                    {
+                                        "name": "SaveConfigAndExport",
+                                        "description": "查找项目中所有场景的TMPPUGUI组件，包括所有预制体上的TMPPUGUI组件，存储源文本信息并且导出Json格式和CSV格式的文件",
+                                        "params": [],
+                                        "returns": {
+                                            "type": null,
+                                            "description": null
+                                        }
+                                    },
+                                    {
+                                        "name": "ExportJSON",
+                                        "description": "将当前configs中的信息导出为Json格式",
+                                        "params": [],
+                                        "returns": {
+                                            "type": null,
+                                            "description": null
+                                        }
+                                    },
+                                    {
+                                        "name": "ExportCSV",
+                                        "description": "将当前configs中的信息导出为CSV格式",
+                                        "params": [],
+                                        "returns": {
+                                            "type": null,
+                                            "description": null
+                                        }
+                                    }
+                                ],
+                                "properties": [
+                                    {
+                                        "name": "duplicates",
+                                        "type": "List<DuplicateInfo>",
+                                        "description": "重复的TMPP组件信息"
+                                    }
+                                ],
+                                "events": []
+                            },
+                            {
+                                "name": "TMPPConfigProvider",
+                                "icon": "star",
+                                "category": "core",
+                                "description": "存储文本信息的容器",
+                                "methods": [],
+                                "properties": [
+                                    {
+                                        "name": "language",
+                                        "type": "string",
+                                        "description": "当前文本的语言，用来切换语言"
+                                    },
+                                    {
+                                        "name": "textFont",
+                                        "type": "TMP_FontAsset",
+                                        "description": "语言资源"
+                                    },
+                                    {
+                                        "name": "configs",
+                                        "type": "TMPPConfig[]",
+                                        "description": "配置内容"
+                                    }
+                                ],
+                                "events": []
+                            },
+                            {
+                                "name": "TMPPConfigProviderCreator",
+                                "icon": "star",
+                                "category": "plugin",
+                                "description": "便捷读取Json文件来存储不同语言的文本信息",
+                                "methods": [
+                                    {
+                                        "name": "Apply",
+                                        "description": "将Json文本的内容读取并应用到自身",
+                                        "params": [
+                                            {
+                                                "name": "asset",
+                                                "type": "TextAsset",
+                                                "description": "文本资源"
+                                            }
+                                        ],
+                                        "returns": {
+                                            "type": null,
+                                            "description": null
+                                        }
+                                    }
+                                ],
+                                "properties": [
+                                    {
+                                        "name": "language",
+                                        "type": "string",
+                                        "description": "当前文本的语言，用来切换语言"
+                                    },
+                                    {
+                                        "name": "textFont",
+                                        "type": "TMP_FontAsset",
+                                        "description": "语言资源"
+                                    },
+                                    {
+                                        "name": "configs",
+                                        "type": "TMPPConfig[]",
+                                        "description": "配置内容"
+                                    }
+                                ],
+                                "events": []
+                            }
+                        ]
+                    }
+                };
+
+                this.currentProject = 'plugin';
+            }
+
+            // 渲染API文档
+            render() {
+                const project = this.projects[this.currentProject];
+                const container = document.getElementById('apiContainer');
+
+                // 更新页面标题
+                document.querySelector('header h1').innerHTML = `<i class="fas fa-code"></i> ${project.name}`;
+                document.querySelector('header p').textContent = project.description;
+
+                if (!project.classes || project.classes.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-file-circle-exclamation"></i>
+                            <h3>当前项目没有API文档</h3>
+                            <p>请检查API数据或选择其他项目</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = '';
+
+                project.classes.forEach(apiClass => {
+                    const classElement = document.createElement('div');
+                    classElement.className = `api-class ${apiClass.category}`;
+                    classElement.dataset.category = apiClass.category;
+
+                    classElement.innerHTML = `
+                        <div class="class-header">
+                            <h2><i class="fas fa-${apiClass.icon}"></i> ${apiClass.name}</h2>
+                            <p class="class-description">${apiClass.description}</p>
+                        </div>
+                        
+                        <div class="class-body">
+                            ${apiClass.methods && apiClass.methods.length ? `
+                                <h3 class="section-title"><i class="fas fa-cogs"></i> 方法</h3>
+                                ${apiClass.methods.map(method => `
+                                    <div class="method">
+                                        <div class="item-name">${method.name}</div>
+                                        <div class="item-description">${method.description}</div>
+                                        ${method.params && method.params.length ? `
+                                            ${method.params.map(param => `
+                                                <div class="param">
+                                                    <strong>${param.name}</strong>: ${param.type} - ${param.description}
+                                                </div>
+                                            `).join('')}
+                                        ` : ''}
+                                        ${method.returns ? `
+                                            <div class="return">
+                                                <strong>返回</strong>: ${method.returns.type} - ${method.returns.description}
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                `).join('')}
+                            ` : ''}
+                            
+                            ${apiClass.properties && apiClass.properties.length ? `
+                                <h3 class="section-title"><i class="fas fa-list"></i> 属性</h3>
+                                ${apiClass.properties.map(prop => `
+                                    <div class="property">
+                                        <div class="item-name">${prop.name}</div>
+                                        <div class="item-description">${prop.type} - ${prop.description}</div>
+                                    </div>
+                                `).join('')}
+                            ` : ''}
+                            
+                            ${apiClass.events && apiClass.events.length ? `
+                                <h3 class="section-title"><i class="fas fa-bell"></i> 事件</h3>
+                                ${apiClass.events.map(event => `
+                                    <div class="event">
+                                        <div class="item-name">${event.name}</div>
+                                        <div class="item-description">${event.description}</div>
+                                    </div>
+                                `).join('')}
+                            ` : ''}
+                        </div>
+                    `;
+
+                    container.appendChild(classElement);
+                });
+            }
+
+            // 切换项目
+            switchProject(projectId) {
+                if (this.projects[projectId]) {
+                    this.currentProject = projectId;
+                    this.render();
+                    this.setupEventListeners();
+                }
+            }
+
+            // 设置事件监听器
+            setupEventListeners() {
+                // 搜索功能
+                const searchInput = document.getElementById('searchInput');
+                searchInput.addEventListener('input', () => this.filterContent());
+
+                // 筛选功能
+                const filterButtons = document.querySelectorAll('.filter-btn');
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        this.filterContent();
+                    });
+                });
+            }
+
+            // 过滤内容
+            filterContent() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const filter = document.querySelector('.filter-btn.active').dataset.filter;
+                const apiClasses = document.querySelectorAll('.api-class');
+
+                let visibleCount = 0;
+
+                apiClasses.forEach(apiClass => {
+                    const classContent = apiClass.textContent.toLowerCase();
+                    const category = apiClass.dataset.category;
+
+                    const matchesSearch = searchTerm === '' || classContent.includes(searchTerm);
+                    const matchesFilter = filter === 'all' || category === filter;
+
+                    if (matchesSearch && matchesFilter) {
+                        apiClass.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        apiClass.style.display = 'none';
+                    }
+                });
+
+                // 显示无结果信息
+                const container = document.getElementById('apiContainer');
+                const noResults = container.querySelector('.no-results');
+
+                if (visibleCount === 0) {
+                    if (!noResults) {
+                        const noResultsElement = document.createElement('div');
+                        noResultsElement.className = 'no-results';
+                        noResultsElement.innerHTML = `
+                            <i class="fas fa-file-circle-exclamation"></i>
+                            <h3>没有找到匹配的API</h3>
+                            <p>请尝试其他搜索词或筛选条件</p>
+                        `;
+                        container.appendChild(noResultsElement);
+                    }
+                } else if (noResults) {
+                    noResults.remove();
+                }
+            }
+        }
+
+        // 初始化文档生成器
+        document.addEventListener('DOMContentLoaded', () => {
+            const docGenerator = new APIDocumentGenerator();
+
+            // 初始化渲染
+            docGenerator.render();
+            docGenerator.setupEventListeners();
+
+            // 项目选择器
+            const projectSelect = document.getElementById('projectSelect');
+            projectSelect.addEventListener('change', function () {
+                docGenerator.switchProject(this.value);
+            });
+
+            // 使用说明切换
+            const toggleBtn = document.getElementById('toggleInstructions');
+            const instructions = document.getElementById('instructions');
+
+            toggleBtn.addEventListener('click', function () {
+                instructions.classList.toggle('active');
+                this.innerHTML = instructions.classList.contains('active') ?
+                    '<i class="fas fa-times"></i> 关闭说明' :
+                    '<i class="fas fa-book"></i> 使用说明';
+            });
+
+            // 添加悬停效果
+            document.addEventListener('mouseover', function (e) {
+                if (e.target.closest('.api-class')) {
+                    const apiClass = e.target.closest('.api-class');
+                    apiClass.style.transform = 'translateY(-5px)';
+                }
+            });
+
+            document.addEventListener('mouseout', function (e) {
+                if (e.target.closest('.api-class')) {
+                    const apiClass = e.target.closest('.api-class');
+                    apiClass.style.transform = 'translateY(0)';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

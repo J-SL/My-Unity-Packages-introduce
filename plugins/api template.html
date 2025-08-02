@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模块化API文档生成系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --dark: #1d3557;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --border: #dee2e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .project-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .project-selector label {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .project-selector select {
+            padding: 8px 15px;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            background: white;
+            font-size: 1rem;
+        }
+
+        .instructions {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+
+        .instructions.active {
+            display: block;
+        }
+
+        .instructions h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        .instructions code {
+            background: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .api-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .api-class {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .api-class:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .class-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px;
+        }
+
+        .class-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .class-header h2 i {
+            font-size: 1.4rem;
+        }
+
+        .class-description {
+            font-size: 1.05rem;
+            opacity: 0.9;
+        }
+
+        .class-body {
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin: 20px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .method {
+            background: rgba(67, 97, 238, 0.08);
+            border-left: 4px solid var(--primary);
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .property {
+            background: rgba(76, 201, 240, 0.08);
+            border-left: 4px solid var(--success);
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .event {
+            background: rgba(247, 37, 133, 0.08);
+            border-left: 4px solid var(--warning);
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .item-name {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+
+        .item-description {
+            color: var(--gray);
+        }
+
+        .param {
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+
+        .param strong {
+            color: var(--primary);
+        }
+
+        .return {
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+
+        .return strong {
+            color: var(--success);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--gray);
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .api-container {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .filter-buttons {
+                flex-wrap: wrap;
+            }
+
+            .project-selector {
+                position: static;
+                justify-content: center;
+                margin-top: 20px;
+            }
+        }
+
+        .toggle-instructions {
+            display: block;
+            margin: 0 auto 20px;
+            padding: 10px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-code"></i> 模块化API文档生成系统</h1>
+            <p>通过分离模板与数据，轻松创建和管理多个API文档项目</p>
+
+            <div class="project-selector">
+                <label for="projectSelect">选择项目：</label>
+                <select id="projectSelect">
+                    <option value="plugin">插件API文档</option>
+                    <option value="webapp">Web应用API文档</option>
+                    <option value="mobile">移动端API文档</option>
+                </select>
+            </div>
+        </header>
+
+        <button class="toggle-instructions" id="toggleInstructions">
+            <i class="fas fa-book"></i> 使用说明
+        </button>
+
+        <div class="instructions" id="instructions">
+            <h2><i class="fas fa-info-circle"></i> 系统使用指南</h2>
+            <ol>
+                <li><strong>创建API数据文件</strong>：在<code>apiData</code>目录下创建JSON文件（如plugin.json）</li>
+                <li><strong>定义API结构</strong>：按照指定格式编写API数据：
+                    <pre>{
+  "name": "项目名称",
+  "description": "项目描述",
+  "classes": [
+    {
+      "name": "类名",
+      "icon": "FontAwesome图标名",
+      "category": "类别",
+      "description": "类描述",
+      "methods": [ ... ],
+      "properties": [ ... ],
+      "events": [ ... ]
+    }
+  ]
+}</pre>
+                </li>
+                <li><strong>添加项目</strong>：在<code>APIDocumentGenerator</code>类的<code>projects</code>数组中添加新项目</li>
+                <li><strong>切换项目</strong>：通过顶部下拉菜单选择不同API文档</li>
+                <li><strong>自定义样式</strong>：修改CSS中的颜色变量来自定义主题</li>
+            </ol>
+            <p><strong>提示：</strong> 所有API数据都存储在浏览器内存中，实际应用中应通过AJAX加载外部JSON文件</p>
+        </div>
+
+        <div class="controls">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="搜索类、方法或属性...">
+            </div>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="core">核心类</button>
+                <button class="filter-btn" data-filter="utility">工具类</button>
+                <button class="filter-btn" data-filter="service">服务类</button>
+            </div>
+        </div>
+
+        <div class="api-container" id="apiContainer">
+            <!-- API文档将在这里动态生成 -->
+        </div>
+
+        <footer>
+            <p>API文档生成系统 v2.0 | 模块化设计 | 最后更新：2023年10月</p>
+            <p>© 2023 技术文档中心 | 轻松管理您的API文档</p>
+        </footer>
+    </div>
+
+    <script>
+        // API文档生成器类
+        class APIDocumentGenerator {
+            constructor() {
+                this.projects = {
+                    // 插件API文档
+                    plugin: {
+                        name: "插件API文档",
+                        description: "提供插件开发所需的API参考",
+                        classes: [
+                            {
+                                name: "Plugin",
+                                icon: "plug",
+                                category: "core",
+                                description: "核心插件类，提供插件的初始化、执行操作和资源清理功能",
+                                methods: [
+                                    {
+                                        name: "Init()",
+                                        description: "初始化插件，必须在Start()中调用",
+                                        params: []
+                                    },
+                                    {
+                                        name: "DoAction(string param)",
+                                        description: "执行主要功能，param用于指定操作类型",
+                                        params: [
+                                            { name: "param", type: "string", description: "操作参数，可以是 'start', 'stop', 'pause'" }
+                                        ]
+                                    },
+                                    {
+                                        name: "Dispose()",
+                                        description: "清理资源，在插件生命周期结束时调用",
+                                        params: [],
+                                        returns: { type: "void", description: "无返回值" }
+                                    }
+                                ],
+                                properties: [
+                                    {
+                                        name: "Version",
+                                        type: "string",
+                                        description: "获取当前插件的版本号"
+                                    },
+                                    {
+                                        name: "IsInitialized",
+                                        type: "boolean",
+                                        description: "获取插件是否已初始化"
+                                    }
+                                ],
+                                events: []
+                            },
+                            {
+                                name: "Configuration",
+                                icon: "cog",
+                                category: "core",
+                                description: "配置管理类，用于读取和修改系统配置参数",
+                                methods: [
+                                    {
+                                        name: "LoadConfig(string path)",
+                                        description: "从指定路径加载配置文件",
+                                        params: [
+                                            { name: "path", type: "string", description: "配置文件路径" }
+                                        ]
+                                    },
+                                    {
+                                        name: "SaveConfig()",
+                                        description: "保存当前配置到文件",
+                                        params: []
+                                    }
+                                ],
+                                properties: [
+                                    {
+                                        name: "Settings",
+                                        type: "Dictionary<string, object>",
+                                        description: "获取所有配置项的字典"
+                                    },
+                                    {
+                                        name: "AutoSave",
+                                        type: "boolean",
+                                        description: "获取或设置是否自动保存配置变更"
+                                    }
+                                ],
+                                events: [
+                                    {
+                                        name: "OnConfigChanged",
+                                        description: "当配置发生变更时触发"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+
+                    // Web应用API文档
+                    webapp: {
+                        name: "Web应用API文档",
+                        description: "Web应用程序的API接口参考",
+                        classes: [
+                            {
+                                name: "UserManager",
+                                icon: "users",
+                                category: "core",
+                                description: "用户管理类，处理用户注册、登录和资料管理",
+                                methods: [
+                                    {
+                                        name: "RegisterUser(string username, string password)",
+                                        description: "注册新用户",
+                                        params: [
+                                            { name: "username", type: "string", description: "用户名" },
+                                            { name: "password", type: "string", description: "密码" }
+                                        ]
+                                    },
+                                    {
+                                        name: "Login(string username, string password)",
+                                        description: "用户登录",
+                                        params: [
+                                            { name: "username", type: "string", description: "用户名" },
+                                            { name: "password", type: "string", description: "密码" }
+                                        ],
+                                        returns: { type: "UserSession", description: "用户会话信息" }
+                                    }
+                                ],
+                                properties: [
+                                    {
+                                        name: "CurrentUser",
+                                        type: "User",
+                                        description: "获取当前登录用户"
+                                    }
+                                ],
+                                events: [
+                                    {
+                                        name: "OnUserLoggedIn",
+                                        description: "当用户登录成功时触发"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+
+                    // 移动端API文档
+                    mobile: {
+                        name: "移动端API文档",
+                        description: "移动应用程序的API接口参考",
+                        classes: [
+                            {
+                                name: "LocationService",
+                                icon: "location-dot",
+                                category: "service",
+                                description: "位置服务类，处理地理位置相关功能",
+                                methods: [
+                                    {
+                                        name: "GetCurrentLocation()",
+                                        description: "获取当前位置信息",
+                                        returns: { type: "Location", description: "当前位置对象" }
+                                    },
+                                    {
+                                        name: "StartTracking()",
+                                        description: "开始位置跟踪"
+                                    }
+                                ],
+                                properties: [
+                                    {
+                                        name: "IsTracking",
+                                        type: "boolean",
+                                        description: "是否正在跟踪位置"
+                                    }
+                                ],
+                                events: [
+                                    {
+                                        name: "OnLocationChanged",
+                                        description: "当位置发生变化时触发"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                };
+
+                this.currentProject = 'plugin';
+            }
+
+            // 渲染API文档
+            render() {
+                const project = this.projects[this.currentProject];
+                const container = document.getElementById('apiContainer');
+
+                // 更新页面标题
+                document.querySelector('header h1').innerHTML = `<i class="fas fa-code"></i> ${project.name}`;
+                document.querySelector('header p').textContent = project.description;
+
+                if (!project.classes || project.classes.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-file-circle-exclamation"></i>
+                            <h3>当前项目没有API文档</h3>
+                            <p>请检查API数据或选择其他项目</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = '';
+
+                project.classes.forEach(apiClass => {
+                    const classElement = document.createElement('div');
+                    classElement.className = `api-class ${apiClass.category}`;
+                    classElement.dataset.category = apiClass.category;
+
+                    classElement.innerHTML = `
+                        <div class="class-header">
+                            <h2><i class="fas fa-${apiClass.icon}"></i> ${apiClass.name}</h2>
+                            <p class="class-description">${apiClass.description}</p>
+                        </div>
+                        
+                        <div class="class-body">
+                            ${apiClass.methods && apiClass.methods.length ? `
+                                <h3 class="section-title"><i class="fas fa-cogs"></i> 方法</h3>
+                                ${apiClass.methods.map(method => `
+                                    <div class="method">
+                                        <div class="item-name">${method.name}</div>
+                                        <div class="item-description">${method.description}</div>
+                                        ${method.params && method.params.length ? `
+                                            ${method.params.map(param => `
+                                                <div class="param">
+                                                    <strong>${param.name}</strong>: ${param.type} - ${param.description}
+                                                </div>
+                                            `).join('')}
+                                        ` : ''}
+                                        ${method.returns ? `
+                                            <div class="return">
+                                                <strong>返回</strong>: ${method.returns.type} - ${method.returns.description}
+                                            </div>
+                                        ` : ''}
+                                    </div>
+                                `).join('')}
+                            ` : ''}
+                            
+                            ${apiClass.properties && apiClass.properties.length ? `
+                                <h3 class="section-title"><i class="fas fa-list"></i> 属性</h3>
+                                ${apiClass.properties.map(prop => `
+                                    <div class="property">
+                                        <div class="item-name">${prop.name}</div>
+                                        <div class="item-description">${prop.type} - ${prop.description}</div>
+                                    </div>
+                                `).join('')}
+                            ` : ''}
+                            
+                            ${apiClass.events && apiClass.events.length ? `
+                                <h3 class="section-title"><i class="fas fa-bell"></i> 事件</h3>
+                                ${apiClass.events.map(event => `
+                                    <div class="event">
+                                        <div class="item-name">${event.name}</div>
+                                        <div class="item-description">${event.description}</div>
+                                    </div>
+                                `).join('')}
+                            ` : ''}
+                        </div>
+                    `;
+
+                    container.appendChild(classElement);
+                });
+            }
+
+            // 切换项目
+            switchProject(projectId) {
+                if (this.projects[projectId]) {
+                    this.currentProject = projectId;
+                    this.render();
+                    this.setupEventListeners();
+                }
+            }
+
+            // 设置事件监听器
+            setupEventListeners() {
+                // 搜索功能
+                const searchInput = document.getElementById('searchInput');
+                searchInput.addEventListener('input', () => this.filterContent());
+
+                // 筛选功能
+                const filterButtons = document.querySelectorAll('.filter-btn');
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        this.filterContent();
+                    });
+                });
+            }
+
+            // 过滤内容
+            filterContent() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const filter = document.querySelector('.filter-btn.active').dataset.filter;
+                const apiClasses = document.querySelectorAll('.api-class');
+
+                let visibleCount = 0;
+
+                apiClasses.forEach(apiClass => {
+                    const classContent = apiClass.textContent.toLowerCase();
+                    const category = apiClass.dataset.category;
+
+                    const matchesSearch = searchTerm === '' || classContent.includes(searchTerm);
+                    const matchesFilter = filter === 'all' || category === filter;
+
+                    if (matchesSearch && matchesFilter) {
+                        apiClass.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        apiClass.style.display = 'none';
+                    }
+                });
+
+                // 显示无结果信息
+                const container = document.getElementById('apiContainer');
+                const noResults = container.querySelector('.no-results');
+
+                if (visibleCount === 0) {
+                    if (!noResults) {
+                        const noResultsElement = document.createElement('div');
+                        noResultsElement.className = 'no-results';
+                        noResultsElement.innerHTML = `
+                            <i class="fas fa-file-circle-exclamation"></i>
+                            <h3>没有找到匹配的API</h3>
+                            <p>请尝试其他搜索词或筛选条件</p>
+                        `;
+                        container.appendChild(noResultsElement);
+                    }
+                } else if (noResults) {
+                    noResults.remove();
+                }
+            }
+        }
+
+        // 初始化文档生成器
+        document.addEventListener('DOMContentLoaded', () => {
+            const docGenerator = new APIDocumentGenerator();
+
+            // 初始化渲染
+            docGenerator.render();
+            docGenerator.setupEventListeners();
+
+            // 项目选择器
+            const projectSelect = document.getElementById('projectSelect');
+            projectSelect.addEventListener('change', function () {
+                docGenerator.switchProject(this.value);
+            });
+
+            // 使用说明切换
+            const toggleBtn = document.getElementById('toggleInstructions');
+            const instructions = document.getElementById('instructions');
+
+            toggleBtn.addEventListener('click', function () {
+                instructions.classList.toggle('active');
+                this.innerHTML = instructions.classList.contains('active') ?
+                    '<i class="fas fa-times"></i> 关闭说明' :
+                    '<i class="fas fa-book"></i> 使用说明';
+            });
+
+            // 添加悬停效果
+            document.addEventListener('mouseover', function (e) {
+                if (e.target.closest('.api-class')) {
+                    const apiClass = e.target.closest('.api-class');
+                    apiClass.style.transform = 'translateY(-5px)';
+                }
+            });
+
+            document.addEventListener('mouseout', function (e) {
+                if (e.target.closest('.api-class')) {
+                    const apiClass = e.target.closest('.api-class');
+                    apiClass.style.transform = 'translateY(0)';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
